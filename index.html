@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Book Search</title>
+
+    <body>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.jquery.js"></script>
+        <script src="main.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+        <script type="text/javascript" src="https://www.google.com/books/jsapi.js"></script>
+
+        </script>
+        <div>
+            <form id="myform">
+                <input type="search" data-provide="typeahead" id="books"><input type="hidden" id="value">
+
+                <button id="button" type="button" onclick="searchbook()">Search</button>
+            </form>
+        </div>
+        <div id="result"></div>
+
+
+
+
+    </body>
+</head>
+
+</html>

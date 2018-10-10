@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Book Search</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://www.google.com/books/jsapi.js"></script>
+    <script type="text/javascript" src="https://books.google.com/books/previewlib.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="booksearch.css" />
+
+    <script>
+        google.books.load();
+
+        function bookSearch() {
+
+            var search = document.getElementById('search').value;
+            if (search == null) {
+                return;
+            }
+            var googleAPI = "https://www.googleapis.com/books/v1/volumes?q=" + search +
+                "&maxResults=5";
+
+            result.style.display = "none";
+
+
+            $.getJSON(googleAPI,
+                function(response) {
+                    var books = [];
+                    if (!("items" in response)) {
+                        return;
+                    }
+
+                    for (var i = 0; i < response.items.length; i++) {
+                        var item = response.items[i];
+                        var title = item.volumeInfo.title;
+
+                        if (item.volumeInfo.industryIdentifiers) {
+                            openbook.style.display = "none";
+                            var details = item.volumeInfo.industryIdentifiers[0].identifier;
+                        } else {
+                            openbook.style.display = "block";
+                        }
+                        if (item.volumeInfo.authors) {
+                            title += item.volumeInfo.authors.join(', ');
+                        }
+                        books.push({
+                            label: title,
+                            value: title,
+                            isbnDesc: details
+
+                        });
+                    }
+                    $("#search").autocomplete({
+                        source: books,
+                        select: function(event, ui) {
+                            closebook.style.display = "block";
+                            $("#values").val(
+                                ui.item.isbnDesc);
+                            var viewer = new google.books.DefaultViewer(
+                                document.getElementById('result'));
+                            viewer.load(document.getElementById('values').value);
+                            result.style.display = "block";
+
+                        }
+                    });
+                });
+
+            var span = document.getElementsByClassName("closebook")[0];
+            span.onclick = function() {
+                result.style.display = "none";
+                closebook.style.display = "none";
+                document.getElementById('search').value = "";
+
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <h2>Book Search</h2>
+
+    <div class="container">
+        <div class="searchbox">
+            <input type="text" id="search" onkeyup="bookSearch()" placeholder="enter book name">
+
+        </div>
+        <div>
+            <input type="hidden" id="values">
+        </div>
+        <div>
+            <span id="openbook" class="openbook">no details</span>
+            <span id="closebook" class="closebook">close</span>
+        </div>
+        <div id="result" class="result"></div>
+</body>
+
+</html>
